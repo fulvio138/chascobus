@@ -1,0 +1,116 @@
+
+<div class="container">
+        <div class="card" style="margin-top: 5px;">
+            <div class="card-header">Ingresar Datos Persona</div>
+            <div class="card-body">
+                <form #personForm="ngForm">
+                    <input hidden name="_id" #_id="ngModel" [(ngModel)]="personService.selectedPerson._id">
+                    <div class="row">   
+                        <div class="col">
+                            <mat-form-field>
+                                <mat-select placeholder="Tipo Doc" name="documentType" #documentType="ngModel" [(ngModel)]="personService.selectedPerson.documentType">
+                                    <mat-option *ngFor="let dt of docuTypes" [value]="dt.value">
+                                        {{dt.viewValue}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            
+                            <mat-form-field>
+                                <input matInput name="documentNumber" #documentNumber="ngModel" [(ngModel)]="personService.selectedPerson.documentNumber" placeholder="DNI">
+                            </mat-form-field>                        
+                        </div>
+    
+                        <div class="col">
+                            <mat-form-field>
+                                <input matInput name="name" #name="ngModel" [(ngModel)]="personService.selectedPerson.name" placeholder="Nombre">
+                            </mat-form-field>
+                            
+                            <mat-form-field>
+                                <input matInput name="lastName" #lastName="ngModel" [(ngModel)]="personService.selectedPerson.lastName" placeholder="Apellido">
+                            </mat-form-field>
+                        </div>
+    
+                        <div class="col">
+                            <mat-form-field>                        
+                                <mat-select name="gender" #gender="ngModel" [(ngModel)]="personService.selectedPerson.gender" placeholder="Sexo">
+                                    <mat-option *ngFor="let g of genders" [value]="g.value">
+                                        {{g.viewValue}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>                            
+                           
+                        </div>
+    
+                        <div class="col">                          
+                            
+                            <mat-form-field>
+                                <input matInput name="nationality" #nationality="ngModel" [(ngModel)]="personService.selectedPerson.nationality" placeholder="Nacionalidad">
+                            </mat-form-field>
+                        </div>
+                    </div>        
+                </form>
+            </div>
+        </div>
+        <div class="row divButtons">
+            <div class="col-md-2 col-xs-6">
+                <button type="button" class="btn btn-success" (click)="addPerson(personForm)">Guardar</button>
+            </div>
+            
+        </div>
+        <div #TABLE #table>
+            <table mat-table [dataSource]="personService.people" class="mat-elevation-z8">
+                        
+                    <!--  Column -->
+                    <ng-container matColumnDef="documentType">
+                    <th mat-header-cell *matHeaderCellDef> Tipo Documento </th>
+                    <td mat-cell *matCellDef="let element"> {{element.documentType}} </td>
+                    </ng-container>
+                
+                    <!--  Column -->
+                    <ng-container matColumnDef="documentNumber">
+                    <th mat-header-cell *matHeaderCellDef> Numero Documento </th>
+                    <td mat-cell *matCellDef="let element"> {{element.documentNumber}} </td>
+                    </ng-container>
+                
+                    <!--  Column -->
+                    <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef> Nombre </th>
+                    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                    </ng-container>
+                
+                    <!--  Column -->
+                    <ng-container matColumnDef="lastName">
+                    <th mat-header-cell *matHeaderCellDef> Apellido </th>
+                    <td mat-cell *matCellDef="let element"> {{element.lastName}} </td>
+                    </ng-container>
+    
+                    <!--  Column -->
+                    <ng-container matColumnDef="gender">
+                        <th mat-header-cell *matHeaderCellDef> Sexo </th>
+                        <td mat-cell *matCellDef="let element"> {{element.gender}} </td>
+                    </ng-container>
+                
+                    <!--  Column -->
+                    <ng-container matColumnDef="nationality">
+                        <th mat-header-cell *matHeaderCellDef> Nacionalidad </th>
+                        <td mat-cell *matCellDef="let element"> {{element.nationality}} </td>
+                    </ng-container>
+    
+                    <ng-container matColumnDef="operations">
+                        <th mat-header-cell *matHeaderCellDef></th>
+                        <td mat-cell *matCellDef="let element"> 
+                            <a style="cursor: pointer;" (click)="editPerson(element)">
+                                <i class="material-icons">edit</i>
+                            </a>
+                            <a style="cursor: pointer;" (click)="deletePerson(element._id)">
+                                <i class="material-icons">delete</i>
+                            </a>
+                        </td>
+                    </ng-container>
+    
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+        </div>
+        
+    </div>

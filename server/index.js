@@ -14,9 +14,9 @@ app.use(cors({origin: 'http://localhost:4200'}));
 app.use(morgan('dev'));
 app.use(express.json());
 
-
 // Routes
 app.use('/api/passengers', require('./routes/passenger.routes'));
+app.use('/api/people', require('./routes/person.routes'));
 
 // Starting server
 app.listen(app.get('port'), () => {

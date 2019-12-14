@@ -5,6 +5,7 @@ const passengerCtrl = {};
 passengerCtrl.getPassengers = async (req, res) => {
     const passengers = await Passenger.find();
     res.json(passengers);          
+    console.log("alerrrta bogota");
 };
 
 passengerCtrl.createPassenger = async (req, res) => {
@@ -41,7 +42,7 @@ passengerCtrl.editPassenger = async (req, res) => {
     await Passenger.findByIdAndUpdate(id, {$set: passenger}, {new: true});
     res.json({'status':'Passenger Update'});
 };
- 
+
 passengerCtrl.deletePassenger = async (req, res) => {
     const { id } = req.params;
     await Passenger.findByIdAndRemove(id);

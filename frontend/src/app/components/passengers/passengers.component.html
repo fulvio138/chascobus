@@ -40,11 +40,11 @@
         <div class="card-header">Ingresar Datos del Pasajero</div>
         <div class="card-body">
             <form #passengerForm="ngForm" class="">
-                <input hidden name="_id" #_id="ngModel" [(ngModel)]="passengerService.selectedPassenger._id">
+                <input name="_id" #_id="ngModel" [(ngModel)]="passengerService.selectedPassenger._id">
                 <div class="row">   
                     <div class="col">
                         <mat-form-field>
-                            <mat-select placeholder="Tipo Doc" name="documentType" #documentType="ngModel" [(ngModel)]="passengerService.selectedPassenger.documentType">
+                            <mat-select placeholder="Tipo Documento" name="documentType" #documentType="ngModel" [(ngModel)]="passengerService.selectedPassenger.documentType">
                                 <mat-option *ngFor="let dt of docuTypes" [value]="dt.value">
                                     {{dt.viewValue}}
                                 </mat-option>
@@ -52,17 +52,30 @@
                         </mat-form-field>
                         
                         <mat-form-field>
+                            
                             <input matInput name="documentNumber" #documentNumber="ngModel" [(ngModel)]="passengerService.selectedPassenger.documentNumber" placeholder="DNI">
+                           <!--
+                            <input matInput name="documentNumber" 
+                                    #documentNumber="ngModel" 
+                                    [ngModel]="passengerService.selectedPassenger.documentNumber | searchByDni: passengerService.selectedPassenger.documentNumber" 
+                                    (ngModelChange)="passengerService.selectedPassenger.documentNumber=$event" 
+                                    placeholder="DNI">
+                             -->        
                         </mat-form-field>                        
                     </div>
 
                     <div class="col">
                         <mat-form-field>
-                            <input matInput name="name" #name="ngModel" [(ngModel)]="passengerService.selectedPassenger.name" placeholder="Nombre">
+                            <input matInput name="name" #name="ngModel" [(ngModel)]="passengerService.selectedPassenger.name" placeholder="Nombre" required>
+                            <!--
+                            <div [hidden]="name.valid" class="alert alert-danger">
+                                Nombre es requerido
+                            </div>
+                            -->
                         </mat-form-field>
                         
                         <mat-form-field>
-                            <input matInput name="lastName" #lastName="ngModel" [(ngModel)]="passengerService.selectedPassenger.lastName" placeholder="Apellido">
+                            <input matInput name="lastName" #lastName="ngModel" [(ngModel)]="passengerService.selectedPassenger.lastName" placeholder="Apellido" required>
                         </mat-form-field>
                     </div>
 
@@ -102,7 +115,7 @@
                         </mat-form-field>
                         
                         <mat-form-field>
-                            <input matInput name="nationality" #nationality="ngModel" [(ngModel)]="passengerService.selectedPassenger.nationality" placeholder="Nacionalidad">
+                            <input matInput name="nationality" #nationality="ngModel" [(ngModel)]="passengerService.selectedPassenger.nationality" placeholder="Nacionalidad" required>
                         </mat-form-field>
                     </div>
                 </div>        
@@ -111,42 +124,47 @@
     </div>
     <div class="row divButtons">
         <div class="col-md-2 col-xs-6">
-            <button type="button" class="btn btn-success" (click)="addPassenger(passengerForm)">Guardar Pasajero</button>
+            <button type="button" 
+                    class="btn btn-success" 
+                    (click)="addPassenger(passengerForm)">Guardar Pasajero</button>
         </div>
-        <!--
+        
         <div class="col-md-1 col-xs-6">
-            <button type="button" class="btn btn-secondary" (click)="resetForm(passengerForm)">Limpiar</button>
+            <button type="button"
+                    [disabled]="passengerService.selectedPassenger._id !== ''" 
+                    class="btn btn-secondary" 
+                    (click)="resetForm(passengerForm)">Limpiar</button>
         </div>
-        -->
+        
     </div>
     <div #TABLE #table>
         <table mat-table [dataSource]="passengerService.passengers" class="mat-elevation-z8">
 
                 <!--- Note that these columns can be defined in any order.
                     The actual rendered columns are set as a property on the row definition" -->
-            
+        
                 <!--  Column -->
                 <ng-container matColumnDef="documentType">
-                <th mat-header-cell *matHeaderCellDef> Tipo Documento </th>
-                <td mat-cell *matCellDef="let element"> {{element.documentType}} </td>
+                    <th mat-header-cell *matHeaderCellDef> Tipo Documento </th>
+                    <td mat-cell *matCellDef="let element"> {{element.documentType}} </td>
                 </ng-container>
             
                 <!--  Column -->
                 <ng-container matColumnDef="documentNumber">
-                <th mat-header-cell *matHeaderCellDef> Numero Documento </th>
-                <td mat-cell *matCellDef="let element"> {{element.documentNumber}} </td>
+                    <th mat-header-cell *matHeaderCellDef> Numero Documento </th>
+                    <td mat-cell *matCellDef="let element"> {{element.documentNumber}} </td>
                 </ng-container>
             
                 <!--  Column -->
                 <ng-container matColumnDef="name">
-                <th mat-header-cell *matHeaderCellDef> Nombre </th>
-                <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                    <th mat-header-cell *matHeaderCellDef> Nombre </th>
+                    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
                 </ng-container>
             
                 <!--  Column -->
                 <ng-container matColumnDef="lastName">
-                <th mat-header-cell *matHeaderCellDef> Apellido </th>
-                <td mat-cell *matCellDef="let element"> {{element.lastName}} </td>
+                    <th mat-header-cell *matHeaderCellDef> Apellido </th>
+                    <td mat-cell *matCellDef="let element"> {{element.lastName}} </td>
                 </ng-container>
 
                 <!--  Column -->
@@ -197,12 +215,22 @@
                         <a style="cursor: pointer;" (click)="editPassenger(element)">
                             <i class="material-icons">edit</i>
                         </a>
-                        <a style="cursor: pointer;" (click)="deletePassenger(element._id)">
+                        <a style="cursor: pointer;" (click)="deletePassenger(passengerForm,element._id)">
                             <i class="material-icons">delete</i>
                         </a>
                     </td>
                 </ng-container>
 
+                <!-- Header row first group -->
+                <ng-container matColumnDef="header-row-first-group">
+                    <th mat-header-cell *matHeaderCellDef 
+                        [style.text-align]="center"
+                        [attr.colspan]="12"> 
+                    Datos Pasajeros
+                    </th>
+                </ng-container>
+                
+                <tr mat-header-row *matHeaderRowDef="['header-row-first-group']"></tr>
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
@@ -213,7 +241,9 @@
             <button type="button" class="btn btn-warning">Guardar Viaje</button>
         </div>
         <div class="col-md-1 col-xs-6">
-            <button type="button" class="btn btn-dark" (click)="ExportTOExcel(travelDestination,picker)">XLS</button>
+            <button mat-raised-button (click)="ExportTOExcel(travelDestination,picker)">XLS
+                <mat-icon>trending_down</mat-icon>
+            </button>
         </div>
     </div>
 </div>

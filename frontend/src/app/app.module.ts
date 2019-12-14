@@ -20,12 +20,22 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material';
+import { MatButtonModule, MatIconModule } from '@angular/material'
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatToolbarModule } from '@angular/material/toolbar';
+
+import { TravelsComponent } from './components/travels/travels.component';
+import { SearchByDniPipe } from './pipes/search-by-dni.pipe';
+import { ToolbarComponent } from './shared/components/toolbar/toolbar.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     PassengersComponent,
-    PeopleComponent
+    PeopleComponent,
+    TravelsComponent,
+    SearchByDniPipe,
+    ToolbarComponent
   ],
   imports: [
     BrowserModule,
@@ -38,7 +48,11 @@ import { MatNativeDateModule } from '@angular/material';
     MatTableModule,
     MatSelectModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatButtonModule,
+    MatIconModule,
+    MatDialogModule,
+    MatToolbarModule
   ],
   providers: [PassengerService, PersonService],
   bootstrap: [AppComponent]

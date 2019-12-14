@@ -1,9 +1,13 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, Output, EventEmitter, ChangeDetectionStrategy} from '@angular/core';
 import { PassengerService } from '../../services/passenger.service';
 import { NgForm } from '@angular/forms';
 import { Passenger } from 'src/app/models/passenger';
 import { isFulfilled } from 'q';
 import * as XLSX from 'xlsx'; 
+import { FormControl } from '@angular/forms';
+import { debounceTime } from 'rxjs/operators';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+
 
 declare var M: any;
 
@@ -16,8 +20,18 @@ export interface SelectType {
   selector: 'app-passengers',
   templateUrl: './passengers.component.html',
   styleUrls: ['./passengers.component.scss'],
-  providers: [PassengerService]
+  providers: [PassengerService],
+  //changeDetection: ChangeDetectionStrategy.OnPush
 })
+
+/*
+function MaysPrimera(string){
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+texto = 'HOLA MUNDO';
+texto = MaysPrimera(texto.toLowerCase()); // Hola mundo
+*/
 
 export class PassengersComponent implements OnInit {
   
@@ -32,19 +46,30 @@ export class PassengersComponent implements OnInit {
     let year = travelDate.getFullYear();
     console.log(day+month+year);
     */
-   
-    const destination = travelDestination.value.toLowerCase();
+    const destination = travelDestination.value.toLowerCase();    
     const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.TABLE.nativeElement);  
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();  
+    ws['!cols'] = [];
+    ws['!cols'][0] = { width: 20};
+    ws['!cols'][1] = { width: 20};
+    ws['!cols'][7] = { width: 20};
+    ws['!cols'][9] = { width: 20};
+    ws['!cols'][10] = { width: 20};
+    ws['!cols'][11] = { hidden: true };
+    ws['!rows'] = [];
+    ws['!rows'][0] = { hpt: 25};
+    const wb: XLSX.WorkBook = XLSX.utils.book_new(); 
     XLSX.utils.book_append_sheet(wb, ws, destination); 
-    XLSX.utils.sheet_add_aoa(wb,[[1,2], [2,3], [3,4]], {origin: "A2"});
     XLSX.writeFile(wb, 'planilla-viaje-a-'+destination+'.xlsx');  
-    
   }; 
 
   docuTypes: SelectType[] = [
     {value: 'DNI', viewValue: 'DNI'},
-    {value: 'Libreta', viewValue: 'Libreta'}
+    {value: "cuit", viewValue: "CUIT"},
+    {value: "provincial_ci", viewValue: "CI provincial"},
+    {value: "identity_card", viewValue: "Cédula de identidad"},
+    {value: "enlistment_book", viewValue: "Libreta de enrolamiento"},
+    {value: "passport", viewValue: "Pasaporte"},
+    {value: "civic_notebook", viewValue: "Libreta cívica"},
   ];  
   genders: SelectType[] = [
     {value: 'M', viewValue: 'Masculino'},
@@ -61,13 +86,24 @@ export class PassengersComponent implements OnInit {
 
   ngOnInit() {
     this.getPassengers();
+    /*
+    this.searchByDni.valueChanges
+      .pipe(
+        debounceTime(300)
+      )
+      .subscribe(value => this.searchEmitter.emit(value))
+    */  
   }
+
+  //searchByDni = new FormControl();
+
+  //@Output('searchByDni') searchEmitter = new EventEmitter<string>();
 
   addPassenger(form: NgForm){
     if(form.value._id){
       this.passengerService.putPassenger(form.value)
         .subscribe(res => {
-          console.log(res);
+          //console.log(res);
           this.resetForm(form);
           //M.toast({html:'Se acualizo correctamente'});
           this.getPassengers();
@@ -75,7 +111,7 @@ export class PassengersComponent implements OnInit {
     } else {
       this.passengerService.postPassengers(form.value)
       .subscribe(res => {
-        console.log(res);
+        //console.log(res);
         this.resetForm(form);
         //M.toast({html:'Se agrego correctamente'});
         this.getPassengers();
@@ -87,7 +123,7 @@ export class PassengersComponent implements OnInit {
     this.passengerService.getPassengers()
       .subscribe(res => {
         this.passengerService.passengers = res as Passenger[];
-        console.log(res);
+        //console.log(res);
       })
   };
 
@@ -95,11 +131,12 @@ export class PassengersComponent implements OnInit {
     this.passengerService.selectedPassenger = passenger;
   };
 
-  deletePassenger(_id: string){
+  deletePassenger(form: NgForm, _id: string){
     if(confirm('Seguro desea eliminar?')){
       this.passengerService.deletePassenger(_id)
         .subscribe(res => {
           console.log(res);
+          this.resetForm(form);
           this.getPassengers();
           //M.toast({html:'Se elimino correctamente'});
         });
@@ -130,4 +167,5 @@ export class PassengersComponent implements OnInit {
     }
   };
 
+ 
 }

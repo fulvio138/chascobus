@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -23,11 +23,19 @@ import { MatNativeDateModule } from '@angular/material';
 import { MatButtonModule, MatIconModule } from '@angular/material'
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatCardModule } from '@angular/material/card';
+
 
 import { TravelsComponent } from './components/travels/travels.component';
 import { SearchByDniPipe } from './pipes/search-by-dni.pipe';
 import { ToolbarComponent } from './shared/components/toolbar/toolbar.component';
 
+/* Firebase 
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireStorageModule, StorageBucket } from '@angular/fire/storage';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+*/
 @NgModule({
   declarations: [
     AppComponent,
@@ -41,6 +49,7 @@ import { ToolbarComponent } from './shared/components/toolbar/toolbar.component'
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+    ReactiveFormsModule, 
     HttpClientModule,
     BrowserAnimationsModule,
     MatFormFieldModule,
@@ -52,7 +61,8 @@ import { ToolbarComponent } from './shared/components/toolbar/toolbar.component'
     MatButtonModule,
     MatIconModule,
     MatDialogModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatCardModule
   ],
   providers: [PassengerService, PersonService],
   bootstrap: [AppComponent]

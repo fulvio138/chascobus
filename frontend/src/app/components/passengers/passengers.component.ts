@@ -166,6 +166,5 @@ export class PassengersComponent implements OnInit {
       this.passengerService.selectedPassenger.destinationProvince = travelDestinationProvince;      
     }
   };
-
  
 }

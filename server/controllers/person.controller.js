@@ -11,7 +11,8 @@ personCtrl.createPerson = async (req, res) => {
         name: req.body.name,
         lastName: req.body.lastName,
         gender: req.body.gender,
-        nationality: req.body.nationality
+        nationality: req.body.nationality,
+        telephoneNumber: req.body.telephoneNumber
     });
     await person.save();
     console.log(person);
@@ -24,9 +25,13 @@ personCtrl.getPerson = async (req, res) => {
 personCtrl.editPerson = async (req, res) => {
     const { id } = req.params;
     const person = {
+        documentType: req.body.documentType,
         documentNumber: req.body.documentNumber,
         name: req.body.name,
-        lastName: req.body.lastName
+        lastName: req.body.lastName,
+        gender: req.body.gender,
+        nationality: req.body.nationality,
+        telephoneNumber: req.body.telephoneNumber
     };
     await Person.findByIdAndUpdate(id, {$set: person}, {new: true});
     res.json({'status':'Person Update'});

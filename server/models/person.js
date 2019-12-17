@@ -7,7 +7,8 @@ const PersonSchema = new Schema({
     name: {type: String, required: true},
     lastName: {type: String, required: true},
     gender: {type: String, required: true},
-    nationality: {type: String, required: true}
+    nationality: {type: String, required: true},
+    telephoneNumber: {type: Number, required: true}
 });
 
 module.exports = mongoose.model('Person', PersonSchema);

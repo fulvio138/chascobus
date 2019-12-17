@@ -3,7 +3,7 @@
     <div class="card">
         <div class="card-header">Ingresar Datos del Viaje</div>
         <div class="card-body">
-            <div class="row">
+            <div hidden class="row">
                 <div class="col-md-2">
                     <mat-form-field>
                         <input matInput [matDatepicker]="picker" placeholder="Fecha">
@@ -40,7 +40,7 @@
         <div class="card-header">Ingresar Datos del Pasajero</div>
         <div class="card-body">
             <form #passengerForm="ngForm" class="">
-                <input name="_id" #_id="ngModel" [(ngModel)]="passengerService.selectedPassenger._id">
+                <input hidden name="_id" #_id="ngModel" [(ngModel)]="passengerService.selectedPassenger._id">
                 <div class="row">   
                     <div class="col">
                         <mat-form-field>
@@ -116,6 +116,10 @@
                         
                         <mat-form-field>
                             <input matInput name="nationality" #nationality="ngModel" [(ngModel)]="passengerService.selectedPassenger.nationality" placeholder="Nacionalidad" required>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <input matInput name="telephoneNumber" #telephoneNumber="ngModel" [(ngModel)]="passengerService.selectedPassenger.telephoneNumber" placeholder="Teléfono">
                         </mat-form-field>
                     </div>
                 </div>        
@@ -222,26 +226,35 @@
                 </ng-container>
 
                 <!-- Header row first group -->
+                <ng-container matColumnDef="header-row-ppal-group">
+                    <th mat-header-cell *matHeaderCellDef 
+                        [style.text-align]="center"            
+                        [attr.colspan]="12"> 
+                        Datos para lista de pasajeros
+                    </th>
+                </ng-container>
+
                 <ng-container matColumnDef="header-row-first-group">
                     <th mat-header-cell *matHeaderCellDef 
                         [style.text-align]="center"
                         [attr.colspan]="12"> 
-                    Datos Pasajeros
+                        Datos Pasajeros
                     </th>
                 </ng-container>
-                
-                <tr mat-header-row *matHeaderRowDef="['header-row-first-group']"></tr>
+
+                <tr mat-header-row *matHeaderRowDef="['header-row-ppal-group']"></tr>
+                <tr mat-header-row *matHeaderRowDef="['header-row-first-group']"></tr>                
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
     </div>
     
     <div class="row divButtons">
-        <div class="col-md-2 col-xs-6">
+        <div hidden class="col-md-2 col-xs-6">
             <button type="button" class="btn btn-warning">Guardar Viaje</button>
         </div>
         <div class="col-md-1 col-xs-6">
-            <button mat-raised-button (click)="ExportTOExcel(travelDestination,picker)">XLS
+            <button class="btn btn-warning" mat-raised-button (click)="ExportTOExcel(travelDestination,picker)">XLS
                 <mat-icon>trending_down</mat-icon>
             </button>
         </div>

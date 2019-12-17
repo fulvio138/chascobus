@@ -20,14 +20,19 @@ export class PeopleComponent implements OnInit {
   
   docuTypes: SelectType[] = [
     {value: 'DNI', viewValue: 'DNI'},
-    {value: 'Libreta', viewValue: 'Libreta'}
+    {value: "cuit", viewValue: "CUIT"},
+    {value: "provincial_ci", viewValue: "CI provincial"},
+    {value: "identity_card", viewValue: "Cédula de identidad"},
+    {value: "enlistment_book", viewValue: "Libreta de enrolamiento"},
+    {value: "passport", viewValue: "Pasaporte"},
+    {value: "civic_notebook", viewValue: "Libreta cívica"},
   ];  
   genders: SelectType[] = [
     {value: 'M', viewValue: 'Masculino'},
     {value: 'F', viewValue: 'Femenino'}
   ];
     
-  displayedColumns: string[] = ['documentType', 'documentNumber', 'name', 'lastName', 'gender', 'nationality', 'operations'];
+  displayedColumns: string[] = ['documentType', 'documentNumber', 'name', 'lastName', 'gender', 'nationality', 'telephoneNumber', 'operations'];
 
   constructor(private personService: PersonService) { }
 

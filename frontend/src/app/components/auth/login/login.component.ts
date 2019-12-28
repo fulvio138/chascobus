@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private authSvc: AuthService, private route: Router) { }
+  constructor(private authService: AuthService, private router: Router) { }
 
   loginForm = new FormGroup({
     email: new FormControl('', Validators.required),
@@ -27,15 +27,21 @@ export class LoginComponent implements OnInit {
     this.authSvc.login(user);
     */
   }
-
+ 
+  /*
   onLogin(form: UserI){
     //console.log(form)
-    let res = this.authSvc.login(form);
+    let res = this.authService.login(form);
     if (res) {
       console.log('logeado');
-      this.route.navigate(['/'])
+      this.router.navigate(['/'])
     }
-
   }
-
+  */
+ onLogin(form): void {
+  console.log(form);
+  this.authService.login(form).subscribe(res => {
+    this.router.navigateByUrl('/');
+  });
+}
 }

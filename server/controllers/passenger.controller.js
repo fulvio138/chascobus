@@ -1,14 +1,13 @@
 
 const Passenger = require ('../models/passenger');
-const passengerCtrl = {};
 
-passengerCtrl.getPassengers = async (req, res) => {
+exports.getPassengers = async (req, res) => {
     const passengers = await Passenger.find();
     res.json(passengers);          
     console.log("alerrrta bogota");
 };
 
-passengerCtrl.createPassenger = async (req, res) => {
+exports.createPassenger = async (req, res) => {
     const passenger = new Passenger({
         documentType: req.body.documentType,
         documentNumber: req.body.documentNumber,
@@ -27,12 +26,12 @@ passengerCtrl.createPassenger = async (req, res) => {
     res.json({'status': 'passenger saved'});
 };
 
-passengerCtrl.getPassenger = async (req, res) => {
+exports.getPassenger = async (req, res) => {
     const passenger = await Passenger.findById(req.param.id);
     req.json(passenger);
 };
 
-passengerCtrl.editPassenger = async (req, res) => {
+exports.editPassenger = async (req, res) => {
     const { id } = req.params;
     const passenger = {
         documentNumber: req.body.documentNumber,
@@ -43,10 +42,9 @@ passengerCtrl.editPassenger = async (req, res) => {
     res.json({'status':'Passenger Update'});
 };
 
-passengerCtrl.deletePassenger = async (req, res) => {
+exports.deletePassenger = async (req, res) => {
     const { id } = req.params;
     await Passenger.findByIdAndRemove(id);
     res.json({'status':'Passenger Deleted'});
 };
 
-module.exports = passengerCtrl;
